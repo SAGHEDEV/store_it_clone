@@ -5,13 +5,19 @@ import { createAdminClient, createSessionClient } from ".";
 import { cookies } from "next/headers";
 import { parseStringify } from "../utils";
 import { appwriteConfig } from "./config";
+import { appConfig } from "../config";
 
 // authentication
 const { databaseId, userCollectionId } = appwriteConfig;
 
 export const getLoggedinUser = async () => {
   try {
-    const { databases, account } = await createSessionClient();
+    const sessionClient = await createSessionClient();
+    const { databases, account } = sessionClient;
+
+    if (!account || !databases) {
+      return null;
+    }
 
     const result = await (await account()).get();
 
@@ -93,8 +99,9 @@ export const verifySecret = async ({
     (await cookies()).set("appwrite-session", session.secret, {
       path: "/",
       httpOnly: true,
+      secure: appConfig.environment === "production", // Set this to false during development since the app runs on HTTP. If this is set to true, headers won't be set correctly over an insecure connection. I use `appConfig.environment === "production"` so I don’t have to update this manually. Instead, I just update `NEXT_PUBLIC_NODE_ENV` in the `.env` file when needed.
       sameSite: "strict",
-      secure: true,
+      expires: new Date(session.expire),
     });
 
     return parseStringify({ sessionId: session.$id });
@@ -109,32 +116,38 @@ export const createAccount = async ({
   email,
 }: {
   email: string;
-  fullName: string | undefined;
+  fullName?: string;
 }): Promise<string> => {
-  const existingUser = await getUserByEmail({ email });
+  try {
+    // Check if the user already exists
+    const existingUser = await getUserByEmail({ email });
+    if (existingUser) throw new Error("User already exists!");
 
-  const accountId = await sendEmailOTP({ email });
+    // Send OTP and get account ID
+    const accountId = await sendEmailOTP({ email });
+    if (!accountId) throw new Error("Failed to send an OTP!");
 
-  if (!accountId) throw new Error("Failed to send an OTP!");
-
-  if (existingUser) throw new Error("User already exist!");
-
-  if (!existingUser) {
+    // Create a new user document in the database
     const { databases } = await createAdminClient();
+    const db = await databases();
 
-    (await databases()).createDocument(
+    await db.createDocument(
       databaseId as string,
       userCollectionId as string,
       ID.unique(),
       {
-        fullName: fullName,
+        fullName: fullName || "Unknown User",
         email,
         avatar: "https://cdn-icons-png.flaticon.com/512/9203/9203764.png",
-        accountId: accountId,
+        accountId,
       }
     );
+
+    return JSON.parse(JSON.stringify(accountId));
+  } catch (error) {
+    console.error("Error in createAccount:", error);
+    throw new Error("An unexpected error occurred while creating the account.");
   }
-  return JSON.parse(JSON.stringify(accountId));
 };
 
 export const signInUser = async (email: string) => {
