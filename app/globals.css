@@ -374,7 +374,7 @@
 
   /* Mobile Navigation */
   .mobile-header {
-    @apply flex py-5 justify-between px-5 sm:hidden !important;
+    @apply flex lg:hidden py-5 justify-between px-5 !important;
   }
   .header-user {
     @apply my-3 flex items-center gap-2 rounded-full p-1 text-light-100 sm:justify-center sm:bg-brand/10 lg:justify-start lg:p-3 !important;
@@ -419,7 +419,7 @@
 
   /* Sidebar */
   .sidebar {
-    @apply remove-scrollbar hidden h-screen w-[90px] flex-col gap-6 overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] !important;
+    @apply remove-scrollbar h-screen w-[90px] flex-col gap-6 overflow-auto px-5 py-7 hidden lg:flex lg:w-[280px] xl:w-[325px] !important;
   }
   .sidebar-nav {
     @apply h5 mt-9 flex-1 gap-1 text-brand !important;

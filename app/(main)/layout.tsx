@@ -1,7 +1,8 @@
 import Header from "@/components/general-component/Header";
 import MobileNavigation from "@/components/general-component/MobileNavigation";
 import SideBar from "@/components/general-component/SideBar";
-import { getCurrentUser } from "@/lib/appwrite/actions";
+import { Toaster } from "@/components/ui/toaster";
+import { getCurrentUser } from "@/lib/appwrite/actions/user.actions";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -22,10 +23,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           fullName={loggedInUser?.fullName}
           email={loggedInUser?.email}
           avatar={loggedInUser?.avatar}
+          {...loggedInUser}
         />
-        <Header />
+        <Header {...loggedInUser} />
         <div className="main-content">{children}</div>
       </main>
+      <Toaster />
     </main>
   );
 };

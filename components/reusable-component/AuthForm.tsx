@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import { createAccount, signInUser } from "@/lib/appwrite/actions";
+import { createAccount, signInUser } from "@/lib/appwrite/actions/user.actions";
 import OTPModal from "./OTPModal";
 
 const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {

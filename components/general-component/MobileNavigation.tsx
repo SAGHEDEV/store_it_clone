@@ -22,10 +22,14 @@ const MobileNavigation = ({
   fullName,
   email,
   avatar,
+  $id: ownerId,
+  accountId,
 }: {
   fullName: string;
   email: string;
   avatar: string;
+  $id: string;
+  accountId: string;
 }) => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -53,8 +57,8 @@ const MobileNavigation = ({
                 <Image
                   src={avatar}
                   alt="Avatar"
-                  width={50}
-                  height={50}
+                  width={70}
+                  height={70}
                   className="sidebar-user-avatar"
                 />
                 <div className="">
@@ -94,8 +98,8 @@ const MobileNavigation = ({
           <Separator className="my-5 bg-brand/20" />
 
           <div>
-            <FileUploader />
-            <Button type="button" className="mobile-sign-out-button">
+            <FileUploader accountId={accountId} ownerId={ownerId} />
+            <Button type="button" className="mobile-sign-out-button mt-5">
               <Image
                 src="/assets/icons/logout.svg"
                 alt="Logout"

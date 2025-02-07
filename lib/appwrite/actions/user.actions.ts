@@ -1,11 +1,11 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
-import { createAdminClient, createSessionClient } from ".";
+import { createAdminClient, createSessionClient } from "..";
 import { cookies } from "next/headers";
-import { parseStringify } from "../utils";
-import { appwriteConfig } from "./config";
-import { appConfig } from "../config";
+import { parseStringify } from "../../utils";
+import { appwriteConfig } from "../config";
+import { appConfig } from "../../config";
 
 // authentication
 const { databaseId, userCollectionId } = appwriteConfig;
@@ -28,6 +28,8 @@ export const getLoggedinUser = async () => {
     ]);
 
     if (user.total <= 0) return null;
+
+    // console.log(user.documents[0]);
 
     return parseStringify(user.documents[0]);
   } catch (error) {
@@ -139,7 +141,7 @@ export const createAccount = async ({
         fullName: fullName || "Unknown User",
         email,
         avatar: "https://cdn-icons-png.flaticon.com/512/9203/9203764.png",
-        accountId,
+        accountId: accountId,
       }
     );
 

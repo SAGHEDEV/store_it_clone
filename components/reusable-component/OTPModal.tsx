@@ -13,7 +13,10 @@ import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import { sendEmailOTP, verifySecret } from "@/lib/appwrite/actions";
+import {
+  sendEmailOTP,
+  verifySecret,
+} from "@/lib/appwrite/actions/user.actions";
 import { useRouter } from "next/navigation";
 
 const OTPModal = ({
