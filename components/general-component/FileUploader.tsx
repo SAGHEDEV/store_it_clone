@@ -41,7 +41,7 @@ const FileUploader = ({
             ),
           });
 
-          return null; // Stop processing this file
+          return null;
         }
 
         try {
@@ -54,6 +54,10 @@ const FileUploader = ({
 
           if (fileResult) {
             setFiles((prev) => prev.filter((fil) => fil.name !== file.name));
+            toast({
+              variant: "default",
+              description: `${file.name} has been uploaded successfully.`,
+            });
           }
         } catch (error) {
           console.error("File upload failed:", error);
@@ -61,6 +65,7 @@ const FileUploader = ({
             variant: "destructive",
             description: `Failed to upload ${file.name}. Please try again.`,
           });
+          setFiles((prev) => prev.filter((fil) => fil.name !== file.name));
         }
       });
 

@@ -29,8 +29,6 @@ export const getLoggedinUser = async () => {
 
     if (user.total <= 0) return null;
 
-    // console.log(user.documents[0]);
-
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error);
@@ -43,7 +41,7 @@ export const getCurrentUser = async () => {
     const result = await getLoggedinUser();
 
     if (!result?.email) {
-      return null; // Handle cases where user isn't logged in
+      return null;
     }
 
     const user = await (

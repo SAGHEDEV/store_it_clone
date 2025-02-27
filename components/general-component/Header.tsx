@@ -4,10 +4,10 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 
 const Header = ({
-  ownerId,
+  $id: ownerId,
   accountId,
 }: {
-  ownerId: string;
+  $id: string;
   accountId: string;
 }) => {
   return (

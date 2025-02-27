@@ -1,12 +1,14 @@
-import { getLoggedinUser } from "@/lib/appwrite/actions/user.actions";
+import { getCurrentUser } from "@/lib/appwrite/actions/user.actions";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getLoggedinUser();
+  const user = await getCurrentUser();
 
-  if (user) return redirect("/");
+  if (user) {
+    redirect("/");
+  }
   return (
     <main className="w-full min-h-screen flex bg-white">
       <div className="hidden lg:flex flex-col justify-between h-screen bg-brand p-16 min-w-[580px]">
